@@ -33,7 +33,7 @@ env:
 
 # ─────────────────────────────────────────────
 # JOB 1 — FAST TRACK: Upload pre-built AAB
-# (uses medivac-one-v1_0_29.aab already in repo)
+# (downloads medivac-one-v1_0_29.aab from GitHub Release v1.0.29)
 # ─────────────────────────────────────────────
 jobs:
   fast-track-upload:
@@ -45,16 +45,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Locate pre-built AAB
+      - name: Download pre-built AAB from GitHub Release
         id: locate-aab
         run: |
-          AAB_FILE=$(find . -name "*.aab" | head -1)
-          if [ -z "$AAB_FILE" ]; then
-            echo "ERROR: No AAB found in repository"
-            exit 1
-          fi
-          echo "aab_path=$AAB_FILE" >> $GITHUB_OUTPUT
-          echo "Found AAB: $AAB_FILE ($(du -sh $AAB_FILE | cut -f1))"
+          curl -L -o /tmp/medivac-one-v1_0_29.aab \
+            "https://github.com/MasterJediTek/medivac-alpha/releases/download/v1.0.29/medivac-one-v1_0_29.aab"
+          echo "aab_path=/tmp/medivac-one-v1_0_29.aab" >> $GITHUB_OUTPUT
+          echo "Downloaded AAB: $(du -sh /tmp/medivac-one-v1_0_29.aab | cut -f1)"
 
       - name: Set up Google Play credentials
         run: |
@@ -125,7 +122,7 @@ jobs:
           version: 9
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Install EAS CLI
         run: npm install -g eas-cli
