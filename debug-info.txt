@@ -1,0 +1,15 @@
+Debug Info from Screenshot:
+- className: css-textinput-rraywtz r-placeholderTextColor-6taxm2 bg-surface border border-border rounded-lg px-4 py-3 text-foreground
+- color: rgb(156, 163, 175)
+- backgroundColor: rgb(245, 247, 250)
+- pointerEvents: auto
+- userSelect: auto
+- opacity: 1
+- disabled: false
+- readOnly: false
+
+The issue is that the text color is rgb(156, 163, 175) which is a gray color similar to the placeholder.
+This is because text-foreground is being applied but the CSS variable might not be resolving correctly,
+or NativeWind is applying the wrong color.
+
+The foreground color should be #1A1A2E (dark blue) in light mode, but it's showing as gray.

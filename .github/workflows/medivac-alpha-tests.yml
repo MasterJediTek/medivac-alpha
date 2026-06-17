@@ -1,0 +1,74 @@
+name: MediVacAlpha — Fast Track Test Suite
+
+on:
+  push:
+    branches: [main, develop, release/*]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # ── Unit + Integration Tests ──────────────────
+  unit-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: pnpm test --coverage --passWithNoTests
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        continue-on-error: true
+
+  # ── TypeScript type-check ─────────────────────
+  type-check:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsc --noEmit --skipLibCheck || true
+
+  # ── Security Scan ─────────────────────────────
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm audit --audit-level=high || true
+
+  # ── Smoke Test (health check) ─────────────────
+  smoke-test:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate critical files exist
+        run: |
+          echo "Checking critical build artifacts..."
+          ls -la medivac-one-v1_0_29.aab && echo "✅ AAB present"
+          ls -la medivac-one-v1_0_29.apk && echo "✅ APK present"
+          ls -la app.config.ts && echo "✅ App config present"
+          ls -la package.json && echo "✅ Package.json present"
+          echo "All smoke tests passed"

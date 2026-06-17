@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+android/app/build/
+ios/build/
+.expo/
+
+# Environment secrets — NEVER commit
+.env
+.env.production
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Android keystore — keep secret
+*.keystore
+*.jks
+
+# Temp
+tmp/
+temp/
+
+# Large build artifacts (use GitHub Releases instead)
+*.aab
+*.apk
+*.keystore
+*.jks
+*.zip

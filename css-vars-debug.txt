@@ -1,0 +1,14 @@
+CSS Variables from Screenshot:
+--color-foreground: #1A1A2E
+--color-background: #FFFFFF
+--color-surface: #F5F7FA
+--color-muted: #6B7280
+
+The CSS variables ARE correctly set on the root element.
+The foreground color is #1A1A2E (dark blue) which is correct.
+
+But the input's computed color was rgb(156, 163, 175) which is a gray color.
+This means the text-foreground class is not resolving to the CSS variable correctly.
+
+The issue is likely that NativeWind's text-foreground class is not using var(--color-foreground).
+Instead, it might be using a hardcoded value or the wrong variable.

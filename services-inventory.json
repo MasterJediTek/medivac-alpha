@@ -1,0 +1,182 @@
+{
+  "project": "MediVac One Virtual Hospital",
+  "version": "7.4",
+  "lastUpdated": "2026-02-05T06:00:00Z",
+  "totalServices": 100,
+  "totalScreens": 55,
+  "totalTests": 1752,
+  "services": {
+    "authentication": [
+      {"name": "unified-auth-service", "description": "Central authentication orchestration"},
+      {"name": "jeditek-sso-service", "description": "JEDI Single Sign-On integration"},
+      {"name": "microsoft-auth-service", "description": "Microsoft Azure AD OAuth"},
+      {"name": "social-auth-service", "description": "Google, Apple, Facebook authentication"},
+      {"name": "facebook-auth-service", "description": "Facebook-specific authentication"},
+      {"name": "mfa-enforcement-service", "description": "Multi-factor authentication management"},
+      {"name": "azure-ad-service", "description": "Azure Active Directory integration"}
+    ],
+    "security": [
+      {"name": "zero-trust-policy-service", "description": "Zero-trust security framework"},
+      {"name": "security-scan-service", "description": "Vulnerability scanning"},
+      {"name": "system-hardening-service", "description": "Security baseline enforcement"},
+      {"name": "auto-security-baseline-service", "description": "Automated security configuration"},
+      {"name": "credential-management-service", "description": "Secure credential storage"},
+      {"name": "secure-import-export-service", "description": "Encrypted data transfer"}
+    ],
+    "clinical": [
+      {"name": "vital-signs-monitoring-service", "description": "Patient vital signs tracking and alerts"},
+      {"name": "cpoe-service", "description": "Computerized Physician Order Entry"},
+      {"name": "medicare-claiming-service", "description": "Australian Medicare billing integration"},
+      {"name": "infection-control-service", "description": "Infection prevention and tracking"},
+      {"name": "clinical-audit-service", "description": "Clinical compliance auditing"},
+      {"name": "gp-integration-service", "description": "General Practice system integration"},
+      {"name": "australian-gp-service", "description": "Australian GP-specific features"},
+      {"name": "filemaker-patient-sync-service", "description": "FileMaker Pro patient data sync"},
+      {"name": "patient-onboarding-service", "description": "Patient registration workflow"},
+      {"name": "patient-satisfaction-service", "description": "Patient feedback analysis"}
+    ],
+    "communication": [
+      {"name": "broadcast-service", "description": "Facility-wide announcements"},
+      {"name": "push-notification-service", "description": "Mobile push notifications"},
+      {"name": "live-push-notification-service", "description": "APNs/FCM live delivery"},
+      {"name": "teams-integration-service", "description": "Microsoft Teams integration"},
+      {"name": "teams-meeting-service", "description": "Teams video conferencing"},
+      {"name": "email-template-service", "description": "Email template management"},
+      {"name": "email-recipients-service", "description": "Email recipient management"},
+      {"name": "smtp-configuration-service", "description": "SMTP server configuration"},
+      {"name": "smtp-health-service", "description": "SMTP health monitoring"},
+      {"name": "bulk-smtp-import-service", "description": "Bulk SMTP configuration import"}
+    ],
+    "voice": [
+      {"name": "mission-voice-chat-service", "description": "WebRTC voice communication"},
+      {"name": "voice-recording-service", "description": "JEDI Master authorized recording"},
+      {"name": "voice-interaction-service", "description": "Voice command processing"},
+      {"name": "transcription-search-service", "description": "Full-text transcription search"},
+      {"name": "highlight-reels-service", "description": "Training clip extraction"},
+      {"name": "recording-alerts-service", "description": "Recording notification system"},
+      {"name": "recording-highlights-service", "description": "Recording highlight management"},
+      {"name": "recording-integration-service", "description": "Recording system integration"},
+      {"name": "retention-policies-service", "description": "Storage retention management"},
+      {"name": "speaker-analytics-service", "description": "Speaker identification analytics"},
+      {"name": "playlist-service", "description": "Training playlist management"},
+      {"name": "storage-pricing-service", "description": "Storage tier cost management"}
+    ],
+    "devops": [
+      {"name": "cicd-build-service", "description": "CI/CD pipeline automation"},
+      {"name": "cicd-teams-notification-service", "description": "Build status to Teams"},
+      {"name": "beta-testing-service", "description": "TestFlight/Google Play beta management"},
+      {"name": "enhanced-beta-testing-service", "description": "Enhanced beta with JEDI forum"},
+      {"name": "wachs-deployment-service", "description": "WACHS site deployment"},
+      {"name": "wachs-health-service", "description": "WACHS health monitoring"},
+      {"name": "wachs-wan-service", "description": "WACHS WAN management"},
+      {"name": "site-provisioning-service", "description": "New site setup automation"},
+      {"name": "site-cloning-service", "description": "Site template cloning"},
+      {"name": "cloud-infrastructure-service", "description": "Cloud resource management"},
+      {"name": "deployment-approval-service", "description": "Deployment approval workflow"}
+    ],
+    "ai": [
+      {"name": "ai-assistant-service", "description": "AI-powered clinical assistant"},
+      {"name": "ai-commands-service", "description": "Natural language command processing"},
+      {"name": "llm-backend-service", "description": "Large language model integration"}
+    ],
+    "integration": [
+      {"name": "webhook-service", "description": "Webhook management"},
+      {"name": "eclipse-api-service", "description": "Eclipse system integration"},
+      {"name": "claris-connect-service", "description": "Claris Connect automation"},
+      {"name": "onedrive-sync-service", "description": "OneDrive file synchronization"},
+      {"name": "sharepoint-sync-service", "description": "SharePoint document sync"},
+      {"name": "sync-rules-service", "description": "Synchronization rule management"},
+      {"name": "realtime-api-service", "description": "Real-time API connections"},
+      {"name": "production-api-service", "description": "Production API management"}
+    ],
+    "jedi": [
+      {"name": "homing-beacon-service", "description": "Device location tracking"},
+      {"name": "jedi-command-library-service", "description": "JEDI command repository"},
+      {"name": "jedi-forum-crash-service", "description": "Forum crash report posting"},
+      {"name": "jedi-membership-service", "description": "JEDI membership management"},
+      {"name": "jeditek-agent-service", "description": "JediTek agent operations"},
+      {"name": "crash-report-template-service", "description": "Crash report templates"}
+    ],
+    "gamification": [
+      {"name": "tricorder-service", "description": "Medical scanning gamification"},
+      {"name": "cooperative-mission-service", "description": "Multiplayer training missions"},
+      {"name": "pet-service", "description": "Virtual companion system"},
+      {"name": "avatar-service", "description": "User avatar management"},
+      {"name": "gifting-service", "description": "Digital gift system"},
+      {"name": "drill-mode-service", "description": "Emergency drill simulation"},
+      {"name": "drill-certificate-service", "description": "Drill completion certificates"}
+    ],
+    "compliance": [
+      {"name": "compliance-reporting-service", "description": "Compliance report generation"},
+      {"name": "compliance-scheduler-service", "description": "Compliance task scheduling"},
+      {"name": "department-policies-service", "description": "Department policy management"},
+      {"name": "policy-notification-service", "description": "Policy change notifications"},
+      {"name": "incident-playbook-service", "description": "Incident response playbooks"},
+      {"name": "playbook-analytics-service", "description": "Playbook effectiveness analytics"}
+    ],
+    "administration": [
+      {"name": "tasks-todo-service", "description": "Task management"},
+      {"name": "scheduled-report-service", "description": "Automated report scheduling"},
+      {"name": "report-template-service", "description": "Report template management"},
+      {"name": "alerts-dashboard-service", "description": "Alert dashboard management"},
+      {"name": "system-status-service", "description": "System health monitoring"},
+      {"name": "app-store-service", "description": "Internal app store"},
+      {"name": "approval-delegation-service", "description": "Approval workflow delegation"},
+      {"name": "delegation-calendar-service", "description": "Delegation scheduling"},
+      {"name": "dependency-mapping-service", "description": "System dependency tracking"},
+      {"name": "auto-discovery-service", "description": "Network auto-discovery"},
+      {"name": "color-code-service", "description": "Color coding system"},
+      {"name": "desktop-companion-service", "description": "Desktop app companion"},
+      {"name": "companion-control-service", "description": "Companion device control"},
+      {"name": "wearable-device-service", "description": "Wearable device integration"}
+    ]
+  },
+  "screens": {
+    "navigation": ["_layout", "landing", "auth", "install"],
+    "tabs": ["index", "patients", "schedule", "tasks", "more"],
+    "clinical": ["medications", "labs", "documents", "wongi"],
+    "administration": ["admin", "roles-manager", "hospital-permissions", "oauth-config", "settings", "profile"],
+    "jedi": ["jedi", "master-jedi-control", "command-center", "module-scanner", "jedi-sso", "vpn"],
+    "communication": ["communications", "comms", "messages", "notifications", "notification-settings"],
+    "voice": ["voice-chat", "voice-recordings", "highlight-reels", "playlists", "transcription-search", "recording-alerts", "retention-policies"],
+    "devops": ["cicd-builds", "beta-testing", "teams-notifications", "crash-templates", "jedi-forum-crashes"],
+    "resources": ["staff", "rooms", "inventory"],
+    "analytics": ["analytics", "storage-pricing"],
+    "utilities": ["button-matrix", "guard-handover", "integration-control-arm", "knowledge-base", "learning-tools", "mental-health", "object-control-panel", "office365", "sync", "webhook-manager", "webhooks", "role-dashboard"]
+  },
+  "portals": {
+    "primary": [
+      {"name": "Main", "url": "https://jeditek.com.au"},
+      {"name": "WONGI", "url": "https://jeditek.net"},
+      {"name": "Nexus Beacon", "url": "https://nexus.jeditek.net"},
+      {"name": "AlphaPrime", "url": "https://alphaprime.jeditek.com.au"},
+      {"name": "iSkoolEDU", "url": "https://iskooledu.jeditek.com.au"},
+      {"name": "MediVac One", "url": "https://wongi.com.au"},
+      {"name": "Master Class", "url": "https://master.jeditek.com.au"}
+    ],
+    "manus": [
+      {"name": "JEDI.church Resource Hub", "url": "https://jedi-church.manus.space"},
+      {"name": "JEDI VPN Browser", "url": "https://jeditek-bro.manus.space"},
+      {"name": "WONGI Communications", "url": "https://wongi.manus.space"},
+      {"name": "WONGI Integrated System", "url": "https://jeditek.org"},
+      {"name": "Knowledge Base", "url": "https://jedi.church"},
+      {"name": "JEDI Evidence Portal", "url": "https://smpo-evidance-port.manus.space"},
+      {"name": "Project Falcon", "url": "https://falcon.manus.space"},
+      {"name": "JEDI Backend", "url": "https://jedi.click"},
+      {"name": "JEDI Platform", "url": "https://death-star.vip"},
+      {"name": "JEDI Knowledge Base", "url": "https://smpo-ink.manus.space"},
+      {"name": "SchoolZone Master Class", "url": "https://schoolzone.pro"},
+      {"name": "JEDI Platform v3", "url": "https://jedi-system.manus.space"},
+      {"name": "JEDI Installer", "url": "https://jediinstal-krne8jes.manus.space"}
+    ]
+  },
+  "taskLinks": [
+    {"name": "Primary Task", "url": "https://manus.im/share/CBqwaLkisKmTcNOUE6ybt8"},
+    {"name": "Evidence Portal", "url": "https://manus.im/share/9ntwq6pvznbt7n6zPgxQ2J"},
+    {"name": "Platform Development", "url": "https://manus.im/share/XbTkmdBwnznDLcYaa4dtYB"},
+    {"name": "System Integration", "url": "https://manus.im/share/zEmPC5ojo3dzTWqXuVUdZ2"},
+    {"name": "Documentation", "url": "https://manus.im/share/HDuZP8F200qCVMkM67fXaR"},
+    {"name": "Research", "url": "https://manus.im/share/p8BZBzbGA1YZsKkY62pSNM"},
+    {"name": "Portfolio", "url": "https://manus.im/share/gG5gX6wkySQA2XM2CR2MSL"}
+  ]
+}

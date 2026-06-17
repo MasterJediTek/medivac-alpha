@@ -1,0 +1,250 @@
+name: Google Play Console Publishing
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'App version to publish'
+        required: true
+        default: '2.0.0'
+      releaseType:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - alpha
+          - beta
+          - production
+
+env:
+  ANDROID_SDK_VERSION: '34'
+  NODE_VERSION: '22'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.12.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: ${{ env.ANDROID_SDK_VERSION }}
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION=${{ github.event.inputs.version }}
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "version_code=$(echo ${VERSION} | tr -d '.' | sed 's/^//')" >> $GITHUB_OUTPUT
+
+      - name: Update app version
+        run: |
+          sed -i 's/"version": ".*"/"version": "${{ steps.version.outputs.version }}"/' package.json
+          sed -i 's/version: ".*"/version: "${{ steps.version.outputs.version }}"/' app.config.ts
+
+      - name: Create keystore
+        run: |
+          mkdir -p android/app
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/medivac-release.keystore
+
+      - name: Build APK
+        run: |
+          cd android
+          ./gradlew bundleRelease \
+            -Pandroid.injected.signing.store.file=app/medivac-release.keystore \
+            -Pandroid.injected.signing.store.password="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -Pandroid.injected.signing.key.alias="${{ secrets.ANDROID_KEY_ALIAS }}" \
+            -Pandroid.injected.signing.key.password="${{ secrets.ANDROID_KEY_PASSWORD }}"
+
+      - name: Build production APK
+        run: |
+          pnpm run build
+          npx eas build --platform android --non-interactive
+
+      - name: Validate build
+        run: |
+          if [ ! -f "dist/app-release.aab" ]; then
+            echo "Build artifact not found!"
+            exit 1
+          fi
+          echo "Build validated successfully"
+
+      - name: Configure Google Play credentials
+        run: |
+          mkdir -p ~/.config/gcloud
+          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" > ~/.config/gcloud/service-account.json
+
+      - name: Publish to Google Play Console
+        run: |
+          npx ts-node scripts/google-play-publish.ts \
+            --action=publish \
+            --version=${{ steps.version.outputs.version }} \
+            --versionCode=${{ steps.version.outputs.version_code }} \
+            --releaseType=${{ github.event.inputs.releaseType || 'production' }}
+
+      - name: Configure beta testing
+        if: github.event.inputs.releaseType == 'beta' || contains(github.ref, 'beta')
+        run: |
+          npx ts-node scripts/setup-beta-testing.ts \
+            --initialTesters=20 \
+            --targetTesters=100 \
+            --scalingDays=14
+
+      - name: Setup in-app purchases
+        run: |
+          npx ts-node scripts/setup-iap.ts \
+            --yearly=300 \
+            --monthly=25 \
+            --trialDays=10 \
+            --institutionThreshold=30000
+
+      - name: Upload to Google Play
+        run: |
+          npx bundletool upload-bundle \
+            --bundle=dist/app-release.aab \
+            --package-name=space.manus.medivac.one.app \
+            --service-account-json=~/.config/gcloud/service-account.json \
+            --release-notes="MediVac One v${{ steps.version.outputs.version }} - Production Release"
+
+      - name: Create release notes
+        run: |
+          cat > RELEASE_NOTES.md << 'EOF'
+          # MediVac One v${{ steps.version.outputs.version }}
+          
+          ## Release Information
+          - **Version**: ${{ steps.version.outputs.version }}
+          - **Version Code**: ${{ steps.version.outputs.version_code }}
+          - **Release Type**: ${{ github.event.inputs.releaseType || 'production' }}
+          - **Released**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          
+          ## Features
+          - God Mode interface with multi-portal display
+          - Live transmission feeds and interactive sessions
+          - JEDI Systems integration
+          - Stripe payment processing
+          - 10-day free trial
+          - Tiered pricing ($300/year or $25/month)
+          - Institution auto-approval on $30k payment
+          - Beta testing with 20-100 users
+          - Automatic app signing
+          - Offline data synchronization
+          
+          ## Beta Testing
+          - Initial testers: 20
+          - Target testers: 100
+          - Scaling period: 14 days
+          - Daily increase: ~6 testers/day
+          
+          ## Pricing
+          - **Free Trial**: 10 days
+          - **Premium Yearly**: $300 AUD
+          - **Premium Monthly**: $25 AUD
+          - **Enterprise**: Custom pricing (auto-approve on $30k payment)
+          
+          ## Publish Status
+          - ✅ Build successful
+          - ✅ Signed with automatic signing
+          - ✅ Uploaded to Google Play Console
+          - ✅ In-app purchases configured
+          - ✅ Beta testing enabled
+          - ⏳ Awaiting Google Play review
+          EOF
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: MediVac One v${{ steps.version.outputs.version }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: ${{ github.event.inputs.releaseType == 'beta' }}
+
+      - name: Notify Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "MediVac One v${{ steps.version.outputs.version }} - Google Play Publishing",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*MediVac One v${{ steps.version.outputs.version }}*\nGoogle Play Console Publishing\n*Status*: ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Version*\n${{ steps.version.outputs.version }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Release Type*\n${{ github.event.inputs.releaseType || 'production' }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Beta Testers*\n20 → 100"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pricing*\n$300/year or $25/month"
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - name: Save publication log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-play-publish-log
+          path: google-play-publish.log
+          retention-days: 30
+
+      - name: Clean up secrets
+        if: always()
+        run: |
+          rm -f ~/.config/gcloud/service-account.json
+          rm -f android/app/medivac-release.keystore

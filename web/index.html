@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediVacAlpha — JEDITek Virtual Hospital Platform</title>
+  <meta name="description" content="MediVacAlpha by JEDITek.net — The world's most advanced virtual hospital management platform. HIPAA compliant, real-time monitoring, AI-assisted clinical decision support." />
+  <meta name="keywords" content="MediVac, virtual hospital, healthcare app, telemedicine, JEDITek, hospital management, HIPAA" />
+  <meta name="author" content="JEDITek Pty Ltd" />
+  <meta property="og:title" content="MediVacAlpha — JEDITek Virtual Hospital" />
+  <meta property="og:description" content="Complete virtual hospital platform with real-time monitoring, telemedicine, and JEDI Systems integration." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://medivac.jeditek.net" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <style>
+    :root {
+      --jedi-blue: #0a1628;
+      --jedi-cyan: #00d4ff;
+      --jedi-gold: #f5c518;
+      --jedi-green: #00e676;
+      --jedi-red: #ff1744;
+      --medivac-primary: #1565c0;
+      --medivac-light: #e3f2fd;
+      --text-primary: #0d1b2a;
+      --text-muted: #546e7a;
+      --white: #ffffff;
+      --surface: #f8fafc;
+      --border: #e0e7ef;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--jedi-blue);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,22,40,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,212,255,0.2);
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 1.25rem; font-weight: 700; letter-spacing: -0.5px;
+    }
+    .nav-brand .badge {
+      background: var(--jedi-cyan); color: var(--jedi-blue);
+      font-size: 0.65rem; font-weight: 800; padding: 2px 6px;
+      border-radius: 4px; letter-spacing: 1px;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--jedi-cyan); }
+    .nav-cta {
+      background: var(--jedi-cyan); color: var(--jedi-blue);
+      padding: 0.5rem 1.25rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 4rem;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.12) 0%, transparent 70%),
+                  linear-gradient(180deg, #0a1628 0%, #0d1f3c 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300d4ff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 3px;
+      color: var(--jedi-cyan); text-transform: uppercase; margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900;
+      line-height: 1.05; margin-bottom: 1.5rem; position: relative;
+    }
+    .hero h1 span { color: var(--jedi-cyan); }
+    .hero-sub {
+      font-size: 1.15rem; color: rgba(255,255,255,0.65);
+      max-width: 560px; margin: 0 auto 2.5rem; position: relative;
+    }
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+      position: relative;
+    }
+    .btn-primary {
+      background: var(--jedi-cyan); color: var(--jedi-blue);
+      padding: 0.875rem 2rem; border-radius: 10px;
+      font-weight: 800; font-size: 1rem; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 30px rgba(0,212,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,212,255,0.5); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      padding: 0.875rem 2rem; border-radius: 10px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--jedi-cyan); color: var(--jedi-cyan); }
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+      margin-top: 3rem; position: relative;
+    }
+    .badge-pill {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px; padding: 0.4rem 1rem;
+      font-size: 0.78rem; color: rgba(255,255,255,0.7);
+    }
+    .badge-pill .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .dot-green { background: var(--jedi-green); }
+
+    /* STATS */
+    .stats {
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(0,212,255,0.15);
+      border-bottom: 1px solid rgba(0,212,255,0.15);
+      padding: 3rem 2rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      text-align: center; gap: 2rem;
+    }
+    .stat-num { font-size: 2.5rem; font-weight: 900; color: var(--jedi-cyan); }
+    .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      text-align: center; font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800; margin-bottom: 1rem;
+    }
+    .section-title span { color: var(--jedi-cyan); }
+    .section-sub {
+      text-align: center; color: rgba(255,255,255,0.55);
+      max-width: 560px; margin: 0 auto 3.5rem; font-size: 1rem;
+    }
+
+    /* FEATURES GRID */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,212,255,0.12);
+      border-radius: 16px; padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-3px); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(0,212,255,0.12); display: flex; align-items: center;
+      justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;
+    }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+    /* PRICING */
+    .pricing-section { background: linear-gradient(180deg, #0a1628, #0d1f3c); }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+    }
+    .pricing-card {
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 2rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .pricing-card.popular {
+      border-color: var(--jedi-cyan);
+      background: rgba(0,212,255,0.06);
+    }
+    .popular-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: var(--jedi-cyan); color: var(--jedi-blue);
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 100px; text-transform: uppercase;
+    }
+    .plan-name { font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; color: var(--jedi-cyan); text-transform: uppercase; margin-bottom: 1rem; }
+    .plan-price { font-size: 3rem; font-weight: 900; }
+    .plan-price small { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.5); }
+    .plan-desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin: 0.5rem 0 1.5rem; }
+    .plan-features { list-style: none; text-align: left; margin-bottom: 2rem; }
+    .plan-features li { font-size: 0.875rem; padding: 0.4rem 0; color: rgba(255,255,255,0.75); display: flex; align-items: center; gap: 0.6rem; }
+    .plan-features li::before { content: '✓'; color: var(--jedi-green); font-weight: 700; font-size: 1rem; }
+    .plan-btn {
+      display: block; text-align: center; padding: 0.875rem;
+      border-radius: 10px; font-weight: 700; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .plan-btn.primary { background: var(--jedi-cyan); color: var(--jedi-blue); }
+    .plan-btn.outline { border: 1.5px solid rgba(255,255,255,0.25); color: var(--white); }
+    .plan-btn:hover { opacity: 0.85; }
+
+    /* AUTH SECTION */
+    .auth-section { background: rgba(255,255,255,0.02); }
+    .auth-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .auth-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 1.5rem; text-align: center;
+    }
+    .auth-logo { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .auth-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .auth-card p { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+
+    /* TECH STACK */
+    .tech-pills {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+    }
+    .tech-pill {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px; padding: 0.5rem 1.25rem;
+      font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.8);
+    }
+
+    /* DOWNLOAD */
+    .download-section {
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(21,101,192,0.15));
+      border-top: 1px solid rgba(0,212,255,0.2);
+      border-bottom: 1px solid rgba(0,212,255,0.2);
+      text-align: center;
+    }
+    .download-buttons { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
+    .dl-btn {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 14px; padding: 1rem 1.75rem;
+      color: var(--white); text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .dl-btn:hover { border-color: var(--jedi-cyan); background: rgba(0,212,255,0.08); }
+    .dl-btn-icon { font-size: 2rem; }
+    .dl-btn-text small { display: block; font-size: 0.7rem; opacity: 0.6; margin-bottom: 2px; }
+    .dl-btn-text strong { font-size: 1rem; }
+
+    /* COMPLIANCE */
+    .compliance-chips {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+    }
+    .compliance-chip {
+      background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.3);
+      border-radius: 8px; padding: 0.5rem 1rem;
+      font-size: 0.8rem; font-weight: 700; color: var(--jedi-green);
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060e1a;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-brand { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .footer-brand span { color: var(--jedi-cyan); }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin: 1.5rem 0; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.85rem; }
+    .footer-links a:hover { color: var(--jedi-cyan); }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.25); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      nav { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span>MediVac<strong>Alpha</strong></span>
+    <span class="badge">JEDITEK</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#auth">Sign In</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Get the App</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">JEDITek.net Proprietary Platform</p>
+  <h1>The Virtual Hospital<br/>Platform for <span>2026</span></h1>
+  <p class="hero-sub">MediVacAlpha delivers real-time patient monitoring, telemedicine, clinical decision support, and full JEDI Systems integration — in one HIPAA-compliant app.</p>
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">
+      ▶ Download Free Trial
+    </a>
+    <a href="https://play.google.com/store/apps/details?id=space.manus.medivac.one.app" class="btn-secondary" target="_blank">
+      Google Play Store
+    </a>
+  </div>
+  <div class="hero-badges">
+    <span class="badge-pill"><span class="dot dot-green"></span>HIPAA Compliant</span>
+    <span class="badge-pill"><span class="dot dot-green"></span>GDPR Ready</span>
+    <span class="badge-pill"><span class="dot dot-green"></span>10-Day Free Trial</span>
+    <span class="badge-pill"><span class="dot dot-green"></span>100+ Services</span>
+    <span class="badge-pill"><span class="dot dot-green"></span>1,752 Tests Passing</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div><div class="stat-num">100+</div><div class="stat-label">Integrated Services</div></div>
+  <div><div class="stat-num">55+</div><div class="stat-label">App Screens</div></div>
+  <div><div class="stat-num">1,752</div><div class="stat-label">Tests Passing</div></div>
+  <div><div class="stat-num">99.9%</div><div class="stat-label">Uptime SLA</div></div>
+  <div><div class="stat-num">v7.4</div><div class="stat-label">Current Version</div></div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <h2 class="section-title">Everything a <span>Virtual Hospital</span> Needs</h2>
+    <p class="section-sub">From emergency triage to family coordination — MediVacAlpha covers every workflow.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏥</div>
+        <h3>Real-Time Patient Monitoring</h3>
+        <p>Vital signs, alerts, bed board, department capacity — all live. CODE BLUE notifications with automatic JEDI Council escalation.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📹</div>
+        <h3>Telemedicine & Video Calls</h3>
+        <p>WebRTC-powered video consultations, call recording, interactive sessions, and Microsoft Teams integration built in.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <h3>Accessible Route Planner</h3>
+        <p>Wheelchair-accessible indoor navigation with beacon calibration, AR overlay, and real-time occupancy avoidance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI Clinical Assistant</h3>
+        <p>LLM-powered summarization, CPOE support, medication safety checks, and AI-driven diagnostic suggestions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3>Zero-Trust Security</h3>
+        <p>Biometric unlock, MFA, JEDI SSO, role-based access, audit trails, and automatic session hardening.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💊</div>
+        <h3>Medicare & Billing</h3>
+        <p>Australian Medicare claiming, GP integration, institution billing, and automatic enterprise approval at $30k threshold.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👨‍👩‍👧</div>
+        <h3>Family Coordination</h3>
+        <p>Family member permissions, visitor management, real-time status updates, and emergency contact notifications.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>God Mode Admin Interface</h3>
+        <p>Multi-portal JEDI Systems display, live transmission feeds, override controls, and full system audit dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Full Offline Support</h3>
+        <p>Three-tier caching (in-memory → AsyncStorage → S3) ensures the app works even without internet connectivity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing-section">
+  <div class="container">
+    <h2 class="section-title">Simple, Transparent <span>Pricing</span></h2>
+    <p class="section-sub">Start free for 10 days — no credit card required. Cancel anytime.</p>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <p class="plan-name">Free Trial</p>
+        <div class="plan-price">$0 <small>/ 10 days</small></div>
+        <p class="plan-desc">Full access, no commitment</p>
+        <ul class="plan-features">
+          <li>All features unlocked</li>
+          <li>Up to 5 patients</li>
+          <li>Standard support</li>
+          <li>No credit card needed</li>
+        </ul>
+        <a href="#download" class="plan-btn outline">Start Free Trial</a>
+      </div>
+
+      <div class="pricing-card popular">
+        <span class="popular-badge">Most Popular</span>
+        <p class="plan-name">Premium</p>
+        <div class="plan-price">$300 <small>AUD / year</small></div>
+        <p class="plan-desc">or $25 AUD/month — save 17% annually</p>
+        <ul class="plan-features">
+          <li>Unlimited patients</li>
+          <li>All 100+ services</li>
+          <li>Priority support (2hr SLA)</li>
+          <li>JEDI Systems integration</li>
+          <li>Advanced analytics</li>
+          <li>Telemedicine unlimited</li>
+        </ul>
+        <a href="#download" class="plan-btn primary">Get Premium</a>
+      </div>
+
+      <div class="pricing-card">
+        <p class="plan-name">Enterprise</p>
+        <div class="plan-price">$30k+ <small>AUD</small></div>
+        <p class="plan-desc">Auto-approved on payment receipt</p>
+        <ul class="plan-features">
+          <li>Unlimited users & institutions</li>
+          <li>Dedicated account manager</li>
+          <li>Custom JEDI integrations</li>
+          <li>On-premise deployment option</li>
+          <li>SLA 99.9% uptime guaranteed</li>
+          <li>Medicare billing automation</li>
+          <li>Custom development available</li>
+        </ul>
+        <a href="mailto:institutions@medivac.manus.space" class="plan-btn outline">Contact Sales</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AUTH -->
+<section id="auth" class="auth-section">
+  <div class="container">
+    <h2 class="section-title">Sign In Your <span>Way</span></h2>
+    <p class="section-sub">MediVacAlpha supports enterprise SSO and social authentication — zero friction onboarding.</p>
+    <div class="auth-grid">
+      <div class="auth-card">
+        <div class="auth-logo">🪟</div>
+        <h3>Microsoft Azure AD</h3>
+        <p>Enterprise single sign-on with full Azure AD integration and MFA support.</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-logo">🔵</div>
+        <h3>Google OAuth</h3>
+        <p>One-click Google sign-in with secure token management and refresh.</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-logo">🍎</div>
+        <h3>Apple Sign In</h3>
+        <p>Native Apple authentication with privacy-first email relay support.</p>
+      </div>
+      <div class="auth-card">
+        <div class="auth-logo">⚡</div>
+        <h3>JEDI SSO</h3>
+        <p>JEDITek unified single sign-on across all JEDI ecosystem portals.</p>
+      </div>
+    </div>
+    <br/>
+    <div style="text-align:center; margin-top: 1rem;">
+      <p style="font-size:0.85rem; color: rgba(255,255,255,0.45);">
+        All authentication uses OAuth 2.0 + JWT. Tokens expire in 1 hour.
+        MFA enforced for admin accounts. Role-based access control built-in.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download" class="download-section">
+  <div class="container">
+    <h2 class="section-title">Download <span>MediVacAlpha</span></h2>
+    <p class="section-sub">Available on Android now. iOS and Web versions launching soon.</p>
+    <div class="download-buttons">
+      <a href="https://play.google.com/store/apps/details?id=space.manus.medivac.one.app" class="dl-btn" target="_blank">
+        <span class="dl-btn-icon">▶</span>
+        <div class="dl-btn-text">
+          <small>Get it on</small>
+          <strong>Google Play</strong>
+        </div>
+      </a>
+      <a href="medivac-one-v1_0_29.apk" class="dl-btn" download>
+        <span class="dl-btn-icon">📦</span>
+        <div class="dl-btn-text">
+          <small>Direct Download</small>
+          <strong>Android APK v1.0.29</strong>
+        </div>
+      </a>
+      <a href="https://medivac.jeditek.net/web" class="dl-btn">
+        <span class="dl-btn-icon">🌐</span>
+        <div class="dl-btn-text">
+          <small>Run in Browser</small>
+          <strong>Web Version</strong>
+        </div>
+      </a>
+    </div>
+    <p style="margin-top:2rem; font-size:0.8rem; color:rgba(255,255,255,0.35);">
+      Package: space.manus.medivac.one.app &nbsp;|&nbsp; Version: 1.0.29 &nbsp;|&nbsp; Requires Android 8.0+
+    </p>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Enterprise <span>Compliance</span></h2>
+    <p class="section-sub">Built to the highest standards from day one — not bolted on as an afterthought.</p>
+    <div class="compliance-chips">
+      <span class="compliance-chip">✓ HIPAA Compliant</span>
+      <span class="compliance-chip">✓ GDPR Ready</span>
+      <span class="compliance-chip">✓ CCPA Compliant</span>
+      <span class="compliance-chip">✓ WCAG 2.1 AA</span>
+      <span class="compliance-chip">✓ PCI-DSS Level 1</span>
+      <span class="compliance-chip">✓ SOC 2 Type II</span>
+      <span class="compliance-chip">✓ ISO 27001</span>
+      <span class="compliance-chip">✓ Australian Privacy Act</span>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section style="padding-top: 0;">
+  <div class="container">
+    <h2 class="section-title">Built With <span>Best-in-Class</span> Tech</h2>
+    <p class="section-sub">React Native, TypeScript, Expo SDK 54 — the same stack trusted by the world's leading healthcare companies.</p>
+    <div class="tech-pills">
+      <span class="tech-pill">React Native 0.81</span>
+      <span class="tech-pill">Expo SDK 54</span>
+      <span class="tech-pill">TypeScript 5.9</span>
+      <span class="tech-pill">NativeWind</span>
+      <span class="tech-pill">tRPC</span>
+      <span class="tech-pill">TanStack Query</span>
+      <span class="tech-pill">Node.js</span>
+      <span class="tech-pill">PostgreSQL</span>
+      <span class="tech-pill">Drizzle ORM</span>
+      <span class="tech-pill">WebSocket</span>
+      <span class="tech-pill">WebRTC</span>
+      <span class="tech-pill">Stripe</span>
+      <span class="tech-pill">GitHub Actions</span>
+      <span class="tech-pill">Cloud Run</span>
+      <span class="tech-pill">Sentry</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Medi<span>VacAlpha</span> by JEDITek</div>
+  <p style="font-size:0.85rem; color:rgba(255,255,255,0.4); margin-top:0.25rem;">
+    JEDITek Pty Ltd — Proprietary Healthcare Technology
+  </p>
+  <div class="footer-links">
+    <a href="https://jeditek.net">jeditek.net</a>
+    <a href="https://jeditek.com.au">jeditek.com.au</a>
+    <a href="mailto:support@medivac.manus.space">Support</a>
+    <a href="mailto:institutions@medivac.manus.space">Enterprise</a>
+    <a href="https://medivac.manus.space/privacy">Privacy Policy</a>
+    <a href="https://medivac.manus.space/terms">Terms of Service</a>
+  </div>
+  <p class="footer-copy">
+    © 2026 JEDITek Pty Ltd. All rights reserved. MediVacAlpha is a proprietary product of JEDITek.net.<br/>
+    Package: space.manus.medivac.one.app | ABN: Contact us
+  </p>
+</footer>
+
+<script>
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const el = document.querySelector(a.getAttribute('href'));
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+  // Animate stats on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
+  });
+  document.querySelectorAll('.stat-num').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

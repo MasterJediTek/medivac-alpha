@@ -1,0 +1,5 @@
+# Sound effects for menu interactions
+# Add the following audio files:
+# - menu-open.mp3 (150-200ms slide-in sound)
+# - menu-select.mp3 (100-150ms selection click sound)
+# - menu-close.mp3 (150-200ms slide-out sound)
